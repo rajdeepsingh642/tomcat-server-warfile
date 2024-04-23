@@ -11,22 +11,17 @@ pipeline {
                git branch: 'main', url: 'https://github.com/rajdeepsingh642/tomcat-server-warfile.git'
             }
         }
-        stage('compile') {
-            steps {
-             sh "mvn compile"
-             }
-        }    
-       
+      
         stage('build') {
             steps {
-             sh "mvn package -DskipTests"
+             sh "mvn clean package"
             }
         }
 
         stage('tomcat') {
             steps {
             sshagent(['tomcat-server']) { 
-                sh "scp -o StrictHostKeyChecking=no target/demo-maven.jar tomcat@192.168.109.80:/home/tomcat/opt/tomcat/webapps"
+                sh "scp -o StrictHostKeyChecking=no target/my-webapp.war tomcat@192.168.109.80:/home/tomcat/opt/tomcat/webapps"
                                     }
           
             }
